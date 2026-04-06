@@ -3,14 +3,32 @@ package unlp.info.bd2.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+    
+@Entity
+@Table(name = "services")
+
 public class Service {
 
+    @Id
+    // Elijo SEQUENCE ya que resulta ser la mas eficiente en terminos de recursos y manejo de ids
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cliente_seq") 
+    @SequenceGenerator(name = "cliente_seq", sequenceName = "seq_cliente", allocationSize = 1)
     private Long id;
 
+    @Column(nullable = false, length = 100)
     private String name;
 
+    @Column(nullable = false)
     private float price;
 
+    @Column
     private String description;
 
     private List<ItemService> itemServiceList;
