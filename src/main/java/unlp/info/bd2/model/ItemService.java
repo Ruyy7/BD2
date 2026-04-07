@@ -12,6 +12,7 @@ public class ItemService {
     @ManyToOne
     private Purchase purchase;
 
+    @ManyToOne
     private Service service;
 
     public Long getId() {
