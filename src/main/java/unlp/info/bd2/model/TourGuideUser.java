@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.ManyToMany;
+
 public class TourGuideUser extends User {
 
     private String education;
 
+    @ManyToMany(mappedBy = "tourGuides")
     private List<Route> routes;
-
 
     public String getEducation() {
         return education;

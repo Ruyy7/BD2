@@ -1,5 +1,7 @@
 package unlp.info.bd2.model;
 
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 public class ItemService {
 
@@ -7,6 +9,7 @@ public class ItemService {
 
     private int quantity;
 
+    @ManyToOne
     private Purchase purchase;
 
     private Service service;

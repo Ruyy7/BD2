@@ -3,6 +3,9 @@ package unlp.info.bd2.model;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+
 public class Purchase {
 
     Long id;
@@ -17,8 +20,10 @@ public class Purchase {
 
     private Route route;
 
+    @OneToOne(optional = true, mappedBy = "purchase")
     private Review review;
 
+    @OneToMany (mappedBy = "purchase")
     private List<ItemService> itemServiceList;
 
 
