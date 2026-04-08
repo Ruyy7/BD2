@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "users")
 public class User {
 
     private Long id;
@@ -22,6 +30,7 @@ public class User {
 
     private boolean active;
 
+    @OneToMany(mappedBy = "user")
     private List<Purchase> purchaseList;
 
 

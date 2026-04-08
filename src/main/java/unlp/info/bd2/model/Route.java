@@ -2,9 +2,15 @@ package unlp.info.bd2.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "routes")
 public class Route {
 
     private Long id;
@@ -17,14 +23,16 @@ public class Route {
 
     private int maxNumberUsers;
 
+    @ManyToMany
+    @JoinTable (name = "route_stops", joinColumns = @JoinColumn(name = "route_id"))
     private List<Stop> stops;
 
     @ManyToMany
-    @JoinTable(name = "route_driver")
+    @JoinTable(name = "route_drivers", joinColumns = @JoinColumn(name = "route_id"))
     private List<DriverUser> driverList;
 
     @ManyToMany
-    @JoinTable(name = "route_tourGuide")
+    @JoinTable(name = "route_tourGuides", joinColumns = @JoinColumn(name = "route_id"))
     private List<TourGuideUser> tourGuideList;
 
     public Long getId() {

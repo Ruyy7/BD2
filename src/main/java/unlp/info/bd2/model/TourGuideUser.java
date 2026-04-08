@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 
+@Entity
 public class TourGuideUser extends User {
 
     private String education;
 
-    @ManyToMany(mappedBy = "tourGuides")
+    @ManyToMany(mappedBy = "tourGuideList")
     private List<Route> routes;
 
     public String getEducation() {

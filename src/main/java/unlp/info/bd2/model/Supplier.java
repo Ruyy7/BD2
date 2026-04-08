@@ -2,6 +2,13 @@ package unlp.info.bd2.model;
 
 import java.util.List;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "suppliers")
 public class Supplier {
 
     private Long id;
@@ -10,6 +17,7 @@ public class Supplier {
 
     private String authorizationNumber;
 
+    @OneToMany(mappedBy = "supplier")
     private List<Service> services;
 
     public Long getId() {
