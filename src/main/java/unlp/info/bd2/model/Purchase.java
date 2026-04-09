@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -23,18 +24,18 @@ public class Purchase {
 
     private Date date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn (name = "route_id", nullable = false)
     private Route route;
 
-    @OneToOne(optional = true, mappedBy = "purchase")
+    @OneToOne(optional = true, mappedBy = "purchase", fetch = FetchType.LAZY)
     private Review review;
 
-    @OneToMany (mappedBy = "purchase")
+    @OneToMany (mappedBy = "purchase", fetch = FetchType.LAZY)
     private List<ItemService> itemServiceList;
 
     public Long getId() {

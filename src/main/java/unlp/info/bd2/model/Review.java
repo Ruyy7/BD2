@@ -1,6 +1,7 @@
 package unlp.info.bd2.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -16,7 +17,7 @@ public class Review {
 
     private String comment;
 
-    @OneToOne()
+    @OneToOne
     @JoinColumn(name = "purchase_id", nullable = false)
     private Purchase purchase;
 

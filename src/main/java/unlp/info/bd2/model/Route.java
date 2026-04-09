@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -23,15 +24,15 @@ public class Route {
 
     private int maxNumberUsers;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable (name = "route_stops", joinColumns = @JoinColumn(name = "route_id"))
     private List<Stop> stops;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "route_drivers", joinColumns = @JoinColumn(name = "route_id"))
     private List<DriverUser> driverList;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "route_tourGuides", joinColumns = @JoinColumn(name = "route_id"))
     private List<TourGuideUser> tourGuideList;
 
