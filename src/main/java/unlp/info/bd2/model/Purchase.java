@@ -3,6 +3,7 @@ package unlp.info.bd2.model;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -32,10 +33,10 @@ public class Purchase {
     @JoinColumn (name = "route_id", nullable = false)
     private Route route;
 
-    @OneToOne(optional = true, mappedBy = "purchase", fetch = FetchType.LAZY)
+    @OneToOne(optional = true, mappedBy = "purchase", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Review review;
 
-    @OneToMany (mappedBy = "purchase", fetch = FetchType.LAZY)
+    @OneToMany (mappedBy = "purchase", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<ItemService> itemServiceList;
 
     public Long getId() {
