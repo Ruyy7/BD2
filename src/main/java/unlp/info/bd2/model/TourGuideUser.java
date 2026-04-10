@@ -10,7 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 
 @Entity
-@DiscriminatorValue("TourGuide")
+// @DiscriminatorValue("TourGuide") <- Punto SINGLE_TABLE
+
 public class TourGuideUser extends User {
 
     private String education;

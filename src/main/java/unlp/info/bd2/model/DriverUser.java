@@ -9,7 +9,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 
 @Entity
-@DiscriminatorValue("Driver")
+// @DiscriminatorValue("Driver") <- Punto SINGLE_TABLE
+
 public class DriverUser extends User {
 
     private String expedient;
