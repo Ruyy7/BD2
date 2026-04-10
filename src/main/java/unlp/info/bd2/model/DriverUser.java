@@ -3,12 +3,13 @@ package unlp.info.bd2.model;
 
 import java.util.List;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 
 @Entity
-
+@DiscriminatorValue("Driver")
 public class DriverUser extends User {
 
     private String expedient;

@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 
 @Entity
+@DiscriminatorValue("TourGuide")
 public class TourGuideUser extends User {
 
     private String education;
