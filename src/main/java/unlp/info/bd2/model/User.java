@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
+// import jakarta.persistence.DiscriminatorColumn;
+// import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
@@ -16,9 +16,14 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
+
 // @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 // @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING) <- Formo parte del SINGLE_TABLE
-@Inheritance(strategy = InheritanceType.JOINED)
+
+// @Inheritance(strategy = InheritanceType.JOINED)
+
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+
 public class User {
 
     private Long id;

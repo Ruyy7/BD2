@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "driveusers")
+// @Table(name = "driveusers") <- Lo use para JOINED
 // @DiscriminatorValue("Driver") <- Punto SINGLE_TABLE
 
 public class DriverUser extends User {

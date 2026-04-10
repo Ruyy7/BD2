@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tourguideusers")
+// @Table(name = "tourguideusers") <- Lo use para JOINED
 // @DiscriminatorValue("TourGuide") <- Punto SINGLE_TABLE
 
 public class TourGuideUser extends User {
