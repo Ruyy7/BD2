@@ -8,10 +8,12 @@ import java.util.List;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
-// @Table(name = "tourguideusers") <- Lo use para JOINED
+@Table(name = "tourguideusers")
+@PrimaryKeyJoinColumn(name = "user_id")
 // @DiscriminatorValue("TourGuide") <- Punto SINGLE_TABLE
 
 public class TourGuideUser extends User {

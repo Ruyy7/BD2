@@ -7,10 +7,12 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
-// @Table(name = "driveusers") <- Lo use para JOINED
+@Table(name = "driveusers") 
+@PrimaryKeyJoinColumn(name = "user_id")
 // @DiscriminatorValue("Driver") <- Punto SINGLE_TABLE
 
 public class DriverUser extends User {
