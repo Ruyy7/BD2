@@ -3,8 +3,11 @@ package unlp.info.bd2.repositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import unlp.info.bd2.model.Route;
 import unlp.info.bd2.model.Stop;
+import unlp.info.bd2.utils.ToursException;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -12,17 +15,17 @@ public class RouteRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void save (Route route) throws Exception{
+    public void save (Route route) throws ToursException{
         try {
             Session session = this.sessionFactory.getCurrentSession();
             session.save(route);
         }
         catch (Exception e){
             if (e.getClass().equals(org.hibernate.exception.ConstraintViolationException.class)){
-                throw new Exception("Constraint Violation");}
+                throw new ToursException("Constraint Violation");}
             else {
                 System.out.println(e.toString());
-                throw new Exception("Object can't be save");
+                throw new ToursException("Object can't be save");
             }
         }
     }
@@ -45,6 +48,14 @@ public class RouteRepository {
         catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public Optional<Route> getRouteById(Long id){
+        return this.sessionFactory.getCurrentSession().createQuery("from Route where id = :id").setParameter("id", id).uniqueResultOptional();
+    }
+
+    public List<Route> getRoutesBelowPrice(float price){
+        return this.sessionFactory.getCurrentSession().createQuery("from Route where price <= :price").setParameter("price", price).list();
     }
 
     public List<Route> getAllRoutes(){

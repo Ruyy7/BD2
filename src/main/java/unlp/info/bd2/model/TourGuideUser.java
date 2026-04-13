@@ -17,11 +17,15 @@ import jakarta.persistence.Table;
 // @DiscriminatorValue("TourGuide") <- Punto SINGLE_TABLE
 
 public class TourGuideUser extends User {
-
     private String education;
 
     @ManyToMany(mappedBy = "tourGuideList")
     private List<Route> routes;
+
+    public TourGuideUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber, String educaction) {
+        super(username, password, fullName, email, birthdate, phoneNumber);
+        this.education = educaction;
+    }
 
     public String getEducation() {
         return education;

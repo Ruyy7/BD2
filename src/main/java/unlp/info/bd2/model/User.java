@@ -1,6 +1,4 @@
 package unlp.info.bd2.model;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +47,15 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Purchase> purchaseList;
 
+
+    public User(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) {
+        this.username = username;
+        this.password = password;
+        this.name = fullName;
+        this.email = email;
+        this.birthdate = birthdate;
+        this.phoneNumber = phoneNumber;
+    }
 
     public Long getId() {
         return id;

@@ -1,26 +1,29 @@
 package unlp.info.bd2.repositories;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import unlp.info.bd2.model.Supplier;
+import unlp.info.bd2.utils.ToursException;
 
 public class SupplierRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void save (Supplier supplier) throws Exception{
+    public void save (Supplier supplier) throws ToursException{
         try {
             Session session = this.sessionFactory.getCurrentSession();
             session.save(supplier);
         }
         catch (Exception e){
             if (e.getClass().equals(org.hibernate.exception.ConstraintViolationException.class)){
-                throw new Exception("Constraint Violation");}
+                throw new ToursException("Constraint Violation");}
             else {
                 System.out.println(e.toString());
-                throw new Exception("Object can't be save");
+                throw new ToursException("Object can't be save");
             }
         }
     }
@@ -43,6 +46,14 @@ public class SupplierRepository {
         catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public Optional<Supplier> getSupplierById(Long id){
+        return this.sessionFactory.getCurrentSession().createQuery("from Supplier where id = :id").setParameter("id", id).uniqueResultOptional();
+    }
+
+    public Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber){
+        return this.sessionFactory.getCurrentSession().createQuery("from Supplier where authorizationNumber = :authorizationNumber").setParameter("authorizationNumber", authorizationNumber).uniqueResultOptional();
     }
 
     public List<Supplier> getAllSuppliers(){

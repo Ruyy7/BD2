@@ -2,7 +2,6 @@ package unlp.info.bd2.model;
 
 import java.util.Date;
 import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,7 +10,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
 
 @Entity
 @Table(name = "purchases")
@@ -38,6 +36,13 @@ public class Purchase {
 
     @OneToMany (mappedBy = "purchase", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<ItemService> itemServiceList;
+
+    public Purchase(String code, Date date, User user, Route route) {
+        this.code = code;
+        this.date = date;
+        this.user = user;
+        this.route = route;
+    }
 
     public Long getId() {
         return id;

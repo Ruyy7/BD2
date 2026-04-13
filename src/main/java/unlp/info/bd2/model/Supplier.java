@@ -22,6 +22,11 @@ public class Supplier {
     @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Service> services;
 
+    public Supplier(String businessName, String authorizationNumber) {
+        this.businessName = businessName;
+        this.authorizationNumber = authorizationNumber;
+    }
+
     public Long getId() {
         return id;
     }

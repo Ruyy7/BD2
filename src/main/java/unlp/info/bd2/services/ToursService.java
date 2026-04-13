@@ -34,7 +34,6 @@ public interface ToursService {
     Optional<Purchase> getPurchaseByCode(String code);
     void deletePurchase(Purchase purchase) throws ToursException;
     Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException;
-
     void deleteRoute(Route route) throws ToursException;
 
     // CONSULTAS HQL

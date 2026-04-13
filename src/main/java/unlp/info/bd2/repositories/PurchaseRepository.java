@@ -3,13 +3,12 @@ package unlp.info.bd2.repositories;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import unlp.info.bd2.model.Purchase;
-import unlp.info.bd2.model.Route;
-import unlp.info.bd2.model.Service;
-import unlp.info.bd2.model.Supplier;
-import unlp.info.bd2.model.User;
+import unlp.info.bd2.utils.ToursException;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -17,17 +16,17 @@ public class PurchaseRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void save (Purchase purchase) throws Exception{
+    public void save (Purchase purchase) throws ToursException{
         try {
             Session session = this.sessionFactory.getCurrentSession();
             session.save(purchase);
         }
         catch (Exception e){
             if (e.getClass().equals(org.hibernate.exception.ConstraintViolationException.class)){
-                throw new Exception("Constraint Violation");}
+                throw new ToursException("Constraint Violation");}
             else {
                 System.out.println(e.toString());
-                throw new Exception("Object can't be save");
+                throw new ToursException("Object can't be save");
             }
         }
     }
@@ -50,6 +49,10 @@ public class PurchaseRepository {
         catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public Optional<Purchase> getPurchaseByCode(String code){
+        return this.sessionFactory.getCurrentSession().createQuery("from Purchase where code = :code").setParameter("code", code).uniqueResultOptional();
     }
 
     public List<Purchase> getAllPurchases(){

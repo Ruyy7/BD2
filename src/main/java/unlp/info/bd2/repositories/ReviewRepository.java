@@ -5,22 +5,23 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import unlp.info.bd2.model.Review;
+import unlp.info.bd2.utils.ToursException;
 
 public class ReviewRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void save (Review review) throws Exception{
+    public void save (Review review) throws ToursException{
         try {
             Session session = this.sessionFactory.getCurrentSession();
             session.save(review);
         }
         catch (Exception e){
             if (e.getClass().equals(org.hibernate.exception.ConstraintViolationException.class)){
-                throw new Exception("Constraint Violation");}
+                throw new ToursException("Constraint Violation");}
             else {
                 System.out.println(e.toString());
-                throw new Exception("Object can't be save");
+                throw new ToursException("Object can't be save");
             }
         }
     }
