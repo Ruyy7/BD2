@@ -45,7 +45,7 @@ public class ReviewRepository {
         }
     }
 
-    public List getAllReviews(){
+    public List<Review> getAllReviews(){
         return this.sessionFactory.getCurrentSession().createQuery("from Review").list();
     }            
 }

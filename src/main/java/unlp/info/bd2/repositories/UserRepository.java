@@ -4,6 +4,9 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import unlp.info.bd2.model.Purchase;
+import unlp.info.bd2.model.TourGuideUser;
 import unlp.info.bd2.model.User;
 
 public class UserRepository {
@@ -45,7 +48,15 @@ public class UserRepository {
         }
     }
 
-    public List getAllUsers(){
+    public List<User> getAllUsers(){
         return this.sessionFactory.getCurrentSession().createQuery("from User").list();
+    }
+
+    public List<User> getUserSpendingMoreThan(float mount){
+        return this.sessionFactory.getCurrentSession().createQuery("select distinct p.user from Purchase p where p.totalPrice >= :mount").setParameter("mount", mount).getResultList();
+    }
+
+    public List<TourGuideUser> getTourGuidesWithRating1(){
+        return this.sessionFactory.getCurrentSession().createQuery("select distinct tg from Purchase p join p.review rev join p.route r join r.tourGuideList tg where rev.rating = 1").getResultList();
     }
 }

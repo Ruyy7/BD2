@@ -2,6 +2,8 @@ package unlp.info.bd2.repositories;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import unlp.info.bd2.model.Route;
+import unlp.info.bd2.model.Stop;
+
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -45,7 +47,23 @@ public class RouteRepository {
         }
     }
 
-    public List getAllRoutes(){
+    public List<Route> getAllRoutes(){
         return this.sessionFactory.getCurrentSession().createQuery("from Route").list();
+    }
+
+    public List<Route> getRoutesWithStop(Stop stop){
+        return this.sessionFactory.getCurrentSession().createQuery("select distinct r from Route r join r.stops s where s = :stop").setParameter("stop", stop).getResultList();
+    }
+
+    public int getMaxStopOfRoutes(){
+        return (int)this.sessionFactory.getCurrentSession().createQuery("select max(size(r.stops)) from Route r").uniqueResult();
+    }
+
+    public List<Route> getRoutesNotSell(){
+        return this.sessionFactory.getCurrentSession().createQuery("select r from Route r where not in (select p.route from Purchase p)").getResultList();
+    }
+
+    public List<Route> getTop3RoutesWithMaxRating(){
+        return this.sessionFactory.getCurrentSession().createQuery("select p.route from Purchase p join p.review r group by p.route order by avg(r.rating) desc").setMaxResults(3).getResultList();
     }
 }

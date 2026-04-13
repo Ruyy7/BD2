@@ -45,7 +45,12 @@ public class SupplierRepository {
         }
     }
 
-    public List getAllSuppliers(){
+    public List<Supplier> getAllSuppliers(){
         return this.sessionFactory.getCurrentSession().createQuery("from Supplier").list();
-    }        
+    }
+    
+    public List<Supplier> getTopNSuppliersInPurchases(int n){
+        return this.sessionFactory.getCurrentSession().createQuery("select sup from Purchase p join p.itemServiceList i join i.service s join s.supplier sup group by sup order by count(i) desc").setMaxResults(n).getResultList();
+    }
+
 }

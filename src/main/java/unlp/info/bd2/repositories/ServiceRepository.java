@@ -45,7 +45,11 @@ public class ServiceRepository {
         }
     }
 
-    public List getAllServices(){
+    public List<Service> getAllServices(){
         return this.sessionFactory.getCurrentSession().createQuery("from Service").list();
-    }    
+    }
+    
+    public Service getMostDemandedService(){
+        return (Service)this.sessionFactory.getCurrentSession().createQuery("select s from Purchase p join p.itemServiceList i join i.service s group by s order by sum(i.quantity) desc").setMaxResults(1).uniqueResult();
+    }
 }
