@@ -23,7 +23,7 @@ public class Purchase {
 
     private Date date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -34,7 +34,7 @@ public class Purchase {
     @OneToOne(optional = true, mappedBy = "purchase", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Review review;
 
-    @OneToMany (mappedBy = "purchase", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany (mappedBy = "purchase", fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<ItemService> itemServiceList;
 
     public Purchase(String code, Date date, User user, Route route) {
