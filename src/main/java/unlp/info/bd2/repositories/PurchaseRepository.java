@@ -19,7 +19,7 @@ public class PurchaseRepository {
     public void save (Purchase purchase) throws ToursException{
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.save(purchase);
+            session.persist(purchase);
         }
         catch (Exception e){
             if (e.getClass().equals(org.hibernate.exception.ConstraintViolationException.class)){
@@ -34,7 +34,7 @@ public class PurchaseRepository {
     public void update (Purchase purchase){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.update(purchase);
+            session.merge(purchase);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -44,7 +44,7 @@ public class PurchaseRepository {
     public void delete (Purchase purchase){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.delete(purchase);
+            session.remove(purchase);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

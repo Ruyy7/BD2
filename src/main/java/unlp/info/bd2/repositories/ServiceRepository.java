@@ -16,7 +16,7 @@ public class ServiceRepository {
     public void save (Service service) throws ToursException{
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.save(service);
+            session.persist(service);
         }
         catch (Exception e){
             if (e.getClass().equals(org.hibernate.exception.ConstraintViolationException.class)){
@@ -31,7 +31,7 @@ public class ServiceRepository {
     public void update (Service service){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.update(service);
+            session.merge(service);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -41,7 +41,7 @@ public class ServiceRepository {
     public void delete (Service service){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.delete(service);
+            session.remove(service);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

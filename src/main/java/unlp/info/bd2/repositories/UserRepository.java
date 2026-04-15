@@ -18,7 +18,7 @@ public class UserRepository {
     public void save (User user) throws ToursException{
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.save(user);
+            session.persist(user);
         }
         catch (Exception e){
             if (e.getClass().equals(org.hibernate.exception.ConstraintViolationException.class)){
@@ -33,7 +33,7 @@ public class UserRepository {
     public void update (User user){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.update(user);
+            session.merge(user);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -43,7 +43,7 @@ public class UserRepository {
     public void delete (User user){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.delete(user);
+            session.remove(user);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

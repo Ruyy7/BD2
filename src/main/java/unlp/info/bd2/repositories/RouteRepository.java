@@ -18,7 +18,7 @@ public class RouteRepository {
     public void save (Route route) throws ToursException{
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.save(route);
+            session.persist(route);
         }
         catch (Exception e){
             if (e.getClass().equals(org.hibernate.exception.ConstraintViolationException.class)){
@@ -33,7 +33,7 @@ public class RouteRepository {
     public void update (Route route){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.update(route);
+            session.merge(route);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -43,7 +43,7 @@ public class RouteRepository {
     public void delete (Route route){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.delete(route);
+            session.remove(route);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

@@ -14,7 +14,7 @@ public class ReviewRepository {
     public void save (Review review) throws ToursException{
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.save(review);
+            session.persist(review);
         }
         catch (Exception e){
             if (e.getClass().equals(org.hibernate.exception.ConstraintViolationException.class)){
@@ -29,7 +29,7 @@ public class ReviewRepository {
     public void update (Review review){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.update(review);
+            session.merge(review);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -39,7 +39,7 @@ public class ReviewRepository {
     public void delete (Review review){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.delete(review);
+            session.remove(review);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
