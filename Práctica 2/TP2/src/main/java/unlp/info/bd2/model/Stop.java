@@ -1,6 +1,10 @@
 package unlp.info.bd2.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "stops")
 public class Stop {
 
     private Long id;

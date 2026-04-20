@@ -34,15 +34,16 @@ public interface ToursService {
     Optional<Purchase> getPurchaseByCode(String code);
     void deletePurchase(Purchase purchase) throws ToursException;
     Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException;
+    void deleteRoute(Route route) throws ToursException;
 
-    // CONSULTAS
+    // CONSULTAS HQL
     List<Purchase> getAllPurchasesOfUsername(String username);
     List<User> getUserSpendingMoreThan(float mount);
     List<Supplier> getTopNSuppliersInPurchases(int n);
-    Long getCountOfPurchasesBetweenDates(Date start, Date end);
+    long getCountOfPurchasesBetweenDates(Date start, Date end);
     List<Route> getRoutesWithStop(Stop stop);
     Long getMaxStopOfRoutes();
-    List<Route> getRoutesNotSell();
+    List<Route> getRoutsNotSell();
     List<Route> getTop3RoutesWithMaxRating();
     Service getMostDemandedService();
     List<TourGuideUser> getTourGuidesWithRating1();

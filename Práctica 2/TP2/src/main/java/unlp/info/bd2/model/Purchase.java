@@ -2,7 +2,17 @@ package unlp.info.bd2.model;
 
 import java.util.Date;
 import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "purchases")
 public class Purchase {
 
     Long id;
@@ -13,15 +23,26 @@ public class Purchase {
 
     private Date date;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn (name = "route_id", nullable = false)
     private Route route;
 
+    @OneToOne(optional = true, mappedBy = "purchase", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Review review;
 
+    @OneToMany (mappedBy = "purchase", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private List<ItemService> itemServiceList;
 
-
+    public Purchase(String code, Date date, User user, Route route) {
+        this.code = code;
+        this.date = date;
+        this.user = user;
+        this.route = route;
+    }
 
     public Long getId() {
         return id;

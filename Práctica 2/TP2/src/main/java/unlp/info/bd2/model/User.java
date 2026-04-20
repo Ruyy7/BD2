@@ -1,11 +1,33 @@
 package unlp.info.bd2.model;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.Column;
+// import jakarta.persistence.DiscriminatorColumn;
+// import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "users")
+
+// @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+// @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING) <- Formo parte del SINGLE_TABLE
+
+@Inheritance(strategy = InheritanceType.JOINED)
+
+// @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+
 public class User {
 
+    @Id
+    @Column(name = "user_id")
     private Long id;
 
     private String username;
@@ -22,8 +44,18 @@ public class User {
 
     private boolean active;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Purchase> purchaseList;
 
+
+    public User(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) {
+        this.username = username;
+        this.password = password;
+        this.name = fullName;
+        this.email = email;
+        this.birthdate = birthdate;
+        this.phoneNumber = phoneNumber;
+    }
 
     public Long getId() {
         return id;

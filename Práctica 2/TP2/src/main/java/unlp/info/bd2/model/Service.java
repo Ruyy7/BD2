@@ -1,20 +1,43 @@
 package unlp.info.bd2.model;
 
-import java.util.ArrayList;
-import java.util.List;
 
+import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+    
+@Entity
+@Table(name = "services")
 public class Service {
 
+    @Id
+    // Elijo SEQUENCE ya que resulta ser la mas eficiente en terminos de recursos y manejo de ids
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cliente_seq") 
+    @SequenceGenerator(name = "cliente_seq", sequenceName = "seq_cliente", allocationSize = 1)
     private Long id;
 
+    @Column(nullable = false, length = 100)
     private String name;
 
+    @Column(nullable = false)
     private float price;
 
+    @Column
     private String description;
 
+    @OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
     private List<ItemService> itemServiceList;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
 

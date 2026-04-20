@@ -2,6 +2,15 @@ package unlp.info.bd2.model;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "suppliers")
 public class Supplier {
 
     private Long id;
@@ -10,7 +19,13 @@ public class Supplier {
 
     private String authorizationNumber;
 
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Service> services;
+
+    public Supplier(String businessName, String authorizationNumber) {
+        this.businessName = businessName;
+        this.authorizationNumber = authorizationNumber;
+    }
 
     public Long getId() {
         return id;

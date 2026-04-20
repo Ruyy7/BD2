@@ -1,14 +1,25 @@
 package unlp.info.bd2.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "itemServices")
 public class ItemService {
 
     Long id;
 
     private int quantity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchase_id", nullable = false)
     private Purchase purchase;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "service_id", nullable = false)
     private Service service;
 
     public Long getId() {
