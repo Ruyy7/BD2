@@ -18,7 +18,12 @@ public class Review {
     @OneToOne
     @JoinColumn(name = "purchase_id", nullable = false)
     private Purchase purchase;
-
+    
+    public Review(int rating, String comment, Purchase purchase) {
+        this.rating = rating;
+        this.comment = comment;
+        this.purchase = purchase;
+    }
 
     public Long getId() {
         return id;

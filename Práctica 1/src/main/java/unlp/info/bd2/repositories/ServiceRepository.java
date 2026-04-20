@@ -48,6 +48,10 @@ public class ServiceRepository {
         }
     }
 
+    public Optional<Service> getServiceById(Long id){
+        return this.sessionFactory.getCurrentSession().createQuery("from Service where id = :id").setParameter("id", id).uniqueResultOptional();
+    }
+
     public Optional<Service> getServiceByNameAndSupplierId(String name, Long id){
         return this.sessionFactory.getCurrentSession().createQuery("from Service s where s.name = :name and s.supplier.id = :id").setParameter("name", name).setParameter("id", id).uniqueResultOptional();
     }

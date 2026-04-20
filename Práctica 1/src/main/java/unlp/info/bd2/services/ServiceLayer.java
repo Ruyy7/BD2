@@ -1,6 +1,7 @@
 package unlp.info.bd2.services;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import unlp.info.bd2.model.Stop;
 import unlp.info.bd2.model.Supplier;
 import unlp.info.bd2.model.TourGuideUser;
 import unlp.info.bd2.model.User;
+import unlp.info.bd2.repositories.ItemServiceRepository;
 import unlp.info.bd2.repositories.PurchaseRepository;
 import unlp.info.bd2.repositories.ReviewRepository;
 import unlp.info.bd2.repositories.RouteRepository;
@@ -32,6 +34,9 @@ public class ServiceLayer implements ToursService {
     private ServiceRepository serviceRepository;
     private SupplierRepository supplierRepository;
     private UserRepository userRepository;
+    private ItemServiceRepository itemServiceRepository;
+
+
 
     @Transactional
     public User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException {
@@ -102,14 +107,30 @@ public class ServiceLayer implements ToursService {
     // Incluir saves
     @Transactional
     public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'assignDriverByUsername'");
+        Optional<User> optionalDriver = userRepository.getUserByUsername(username);
+        if (optionalDriver.isEmpty() || !(optionalDriver.get() instanceof DriverUser))
+            throw new ToursException("No existe el usuario ingresado, no se pudo realizar la asignación");
+        Optional<Route> optionalRoute = routeRepository.getRouteById(idRoute);
+        if (optionalRoute.isEmpty())
+            throw new ToursException("No existe la ruta ingresada");
+        Route route = optionalRoute.get();
+        if (route.getDriverList() == null)
+            route.setDriverList(new ArrayList<>());
+        route.getDriverList().add((DriverUser) optionalDriver.get());
     }
 
     @Transactional
     public void assignTourGuideByUsername(String username, Long idRoute) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'assignTourGuideByUsername'");
+        Optional<User> optionalTourGuide = userRepository.getUserByUsername(username);
+        if (optionalTourGuide.isEmpty() || !(optionalTourGuide.get() instanceof TourGuideUser))
+            throw new ToursException("No existe el usuario ingresado, no se pudo realizar la asignación");
+        Optional<Route> optionalRoute = routeRepository.getRouteById(idRoute);
+        if (optionalRoute.isEmpty())
+            throw new ToursException("No existe la ruta ingresada");
+        Route route = optionalRoute.get();
+        if (route.getTourGuideList() == null)
+            route.setTourGuideList(new ArrayList<>());
+        route.getTourGuideList().add((TourGuideUser) optionalTourGuide.get());
     }
 
     @Transactional
@@ -120,16 +141,27 @@ public class ServiceLayer implements ToursService {
     }
 
     @Transactional
-    public Service addServiceToSupplier(String name, float price, String description, Supplier supplier)
-            throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addServiceToSupplier'");
+    public Service addServiceToSupplier(String name, float price, String description, Supplier supplier) throws ToursException {
+        try {
+            Service service = new Service(name, price, description, supplier);
+            if (supplier.getServices() == null)
+                supplier.setServices(new ArrayList<>());
+            supplier.getServices().add(service);
+            serviceRepository.save(service);
+            return service;
+        } catch (Exception e) {
+            throw new ToursException("Constraint Violation");
+        }
     }
 
     @Transactional
     public Service updateServicePriceById(Long id, float newPrice) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateServicePriceById'");
+        Optional<Service> optService = serviceRepository.getServiceById(id);
+        if (optService.isEmpty())
+            throw new ToursException("No existe el servicio");
+        Service service = optService.get();
+        service.setPrice(newPrice);
+        return service;
     }
 
     @Transactional
@@ -161,8 +193,12 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addItemToPurchase'");
+        ItemService itemService = new ItemService();
+        itemService.setService(service);
+        itemService.setQuantity(quantity);
+        purchase.addItem(itemService);
+        itemServiceRepository.save(itemService);
+        return itemService;
     }
 
     @Transactional
@@ -177,8 +213,10 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addReviewToPurchase'");
+        Review review = new Review(rating, comment, purchase);
+        purchase.setReview(review);
+        reviewRepository.save(review);
+        return review;
     }
 
     @Transactional
