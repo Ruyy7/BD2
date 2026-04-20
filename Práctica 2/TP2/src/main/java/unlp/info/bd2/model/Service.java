@@ -41,6 +41,10 @@ public class Service {
     private Supplier supplier;
 
 
+    public Service(String name2, float price2, String description2, Supplier supplier2) {
+        //TODO Auto-generated constructor stub
+    }
+
     public Long getId() {
         return id;
     }

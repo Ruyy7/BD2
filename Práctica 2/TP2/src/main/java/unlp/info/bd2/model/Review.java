@@ -20,6 +20,10 @@ public class Review {
     private Purchase purchase;
 
 
+    public Review(int rating2, String comment2, Purchase purchase2) {
+        //TODO Auto-generated constructor stub
+    }
+
     public Long getId() {
         return id;
     }

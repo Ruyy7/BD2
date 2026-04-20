@@ -107,4 +107,18 @@ public class Purchase {
     public void setItemServiceList(List<ItemService> itemServiceList) {
         this.itemServiceList = itemServiceList;
     }
+    
+    public void addItem(ItemService item) {
+        itemServiceList.add(item);
+        item.setPurchase(this);
+        item.getService().getItemServiceList().add(item);
+        this.totalPrice += item.getService().getPrice() * item.getQuantity();
+    }
+
+    public void removeItem(ItemService item) {
+        itemServiceList.remove(item);
+        item.getService().getItemServiceList().remove(item);
+        item.setPurchase(null);
+        this.totalPrice -= item.getService().getPrice() * item.getQuantity();
+    }
 }
