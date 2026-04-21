@@ -1,7 +1,7 @@
 package unlp.info.bd2.repositories;
 
+import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import unlp.info.bd2.model.Stop;
 import unlp.info.bd2.utils.ToursException;
@@ -52,4 +52,7 @@ import org.hibernate.SessionFactory;
         return this.sessionFactory.getCurrentSession().createQuery("from Stop where id = :id").setParameter("id", id).uniqueResultOptional();
     }
 
+    public List<Stop> getStopByNameStart (String name){
+        return this.sessionFactory.getCurrentSession().createQuery("from Stop where name LIKE :name").setParameter("name", name).list();
+    }
 }

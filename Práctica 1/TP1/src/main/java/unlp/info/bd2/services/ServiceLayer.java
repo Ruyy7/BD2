@@ -1,6 +1,5 @@
 package unlp.info.bd2.services;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +21,7 @@ import unlp.info.bd2.repositories.PurchaseRepository;
 import unlp.info.bd2.repositories.ReviewRepository;
 import unlp.info.bd2.repositories.RouteRepository;
 import unlp.info.bd2.repositories.ServiceRepository;
+import unlp.info.bd2.repositories.StopRepository;
 import unlp.info.bd2.repositories.SupplierRepository;
 import unlp.info.bd2.repositories.UserRepository;
 import unlp.info.bd2.utils.ToursException;
@@ -35,8 +35,18 @@ public class ServiceLayer implements ToursService {
     private SupplierRepository supplierRepository;
     private UserRepository userRepository;
     private ItemServiceRepository itemServiceRepository;
+    private StopRepository stopRepository;
 
-
+    public ServiceLayer(PurchaseRepository purchaseRepository, ReviewRepository reviewRepository, RouteRepository routeRepository, ServiceRepository serviceRepository, SupplierRepository supplierRepository, UserRepository userRepository, ItemServiceRepository itemServiceRepository, StopRepository stopRepository) {
+        this.purchaseRepository = purchaseRepository;
+        this.reviewRepository = reviewRepository;
+        this.routeRepository = routeRepository;
+        this.serviceRepository = serviceRepository;
+        this.supplierRepository = supplierRepository;
+        this.userRepository = userRepository;
+        this.itemServiceRepository = itemServiceRepository;
+        this.stopRepository = stopRepository;
+    }
 
     @Transactional
     public User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException {
@@ -71,7 +81,21 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public User updateUser(User user) throws ToursException {
+        Optional<User> user_db = this.userRepository.getUserById(user.getId());
+        if (user_db.isEmpty())
+            throw new ToursException("No existe el usuario a modificar");
+        User userToModify = user_db.get();
+        userToModify.setName(user.getName());
+        userToModify.setPassword(user.getPassword());
+        userToModify.setEmail(user.getEmail());
+        userToModify.setBirthdate(user.getBirthdate());
+        userToModify.setPhoneNumber(user.getPhoneNumber());
+        if (user instanceof DriverUser && userToModify instanceof DriverUser)
+            ((DriverUser) userToModify).setExpedient(((DriverUser)user).getExpedient());
+        if (user instanceof TourGuideUser && userToModify instanceof TourGuideUser)
+            ((TourGuideUser) userToModify).setEducation(((TourGuideUser)user).getEducation());
         this.userRepository.update(user);
+        return userToModify;
     }
 
     @Transactional
@@ -81,14 +105,18 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public Stop createStop(String name, String description) throws ToursException {
+        Stop stop = new Stop(name, description);
+        this.stopRepository.save(stop);
+        return stop;
     }
 
     @Transactional
     public List<Stop> getStopByNameStart(String name) {
+        return this.stopRepository.getStopByNameStart(name);
     }
 
     @Transactional
-    public Route createRoute(String name, float price, float totalKm, int maxNumberOfUsers, List<Stop> stops)
+    public Route createRoute(String name, float price, float totalKm, int maxNumberOfUsers, List<Stop> stops) throws ToursException{
         Route route = new Route(name, price, totalKm, maxNumberOfUsers, stops);
         this.routeRepository.save(route);
         return route;
@@ -104,7 +132,6 @@ public class ServiceLayer implements ToursService {
         return this.routeRepository.getRoutesBelowPrice(price);
     }
 
-    // Incluir saves
     @Transactional
     public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
         Optional<User> optionalDriver = userRepository.getUserByUsername(username);
@@ -166,28 +193,32 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public Optional<Supplier> getSupplierById(Long id) {
-        this.supplierRepository.getSupplierById(id);
+        return this.supplierRepository.getSupplierById(id);
     }
 
     @Transactional
     public Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber) {
-        this.supplierRepository.getSupplierByAuthorizationNumber(authorizationNumber);
+        return this.supplierRepository.getSupplierByAuthorizationNumber(authorizationNumber);
     }
 
     @Transactional
     public Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException {
-        this.serviceRepository.getServiceByNameAndSupplierId(name, id);
+        return this.serviceRepository.getServiceByNameAndSupplierId(name, id);
     }
 
     @Transactional
     public Purchase createPurchase(String code, Route route, User user) throws ToursException {
-        
+        Purchase purchase = new Purchase(code, user, route);
+        this.purchaseRepository.save(purchase);
+        user.getPurchaseList().add(purchase);
+        return purchase;
     }
 
     @Transactional
     public Purchase createPurchase(String code, Date date, Route route, User user) throws ToursException {
         Purchase purchase = new Purchase(code, date, user, route);
         this.purchaseRepository.save(purchase);
+        user.getPurchaseList().add(purchase);
         return purchase;
     }
 
@@ -203,7 +234,7 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public Optional<Purchase> getPurchaseByCode(String code) {
-        this.purchaseRepository.getPurchaseByCode(code);
+        return this.purchaseRepository.getPurchaseByCode(code);
     }
 
     @Transactional
@@ -246,31 +277,31 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public List<Route> getRoutesWithStop(Stop stop) {
-        this.routeRepository.getRoutesWithStop(stop);
+        return this.routeRepository.getRoutesWithStop(stop);
     }
 
     @Transactional
     public Long getMaxStopOfRoutes() {
-        this.routeRepository.getMaxStopOfRoutes();
+        return this.routeRepository.getMaxStopOfRoutes();
     }
 
     @Transactional
     public List<Route> getRoutsNotSell() {
-        this.routeRepository.getRoutesNotSell();
+        return this.routeRepository.getRoutesNotSell();
     }
 
     @Transactional
     public List<Route> getTop3RoutesWithMaxRating() {
-        this.routeRepository.getTop3RoutesWithMaxRating();
+        return this.routeRepository.getTop3RoutesWithMaxRating();
     }
 
     @Transactional
     public Service getMostDemandedService() {
-        this.serviceRepository.getMostDemandedService();
+        return this.serviceRepository.getMostDemandedService();
     }
 
     @Transactional
     public List<TourGuideUser> getTourGuidesWithRating1() {
-        this.userRepository.getTourGuidesWithRating1();
+        return this.userRepository.getTourGuidesWithRating1();
     }   
 }

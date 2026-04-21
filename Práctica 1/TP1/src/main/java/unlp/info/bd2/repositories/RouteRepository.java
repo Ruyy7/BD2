@@ -66,8 +66,8 @@ public class RouteRepository {
         return this.sessionFactory.getCurrentSession().createQuery("select distinct r from Route r join r.stops s where s = :stop").setParameter("stop", stop).getResultList();
     }
 
-    public int getMaxStopOfRoutes(){
-        return (int)this.sessionFactory.getCurrentSession().createQuery("select max(size(r.stops)) from Route r").uniqueResult();
+    public Long getMaxStopOfRoutes(){
+        return (Long)this.sessionFactory.getCurrentSession().createQuery("select max(size(r.stops)) from Route r").uniqueResult();
     }
 
     public List<Route> getRoutesNotSell(){
