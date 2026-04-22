@@ -17,36 +17,34 @@ import unlp.info.bd2.model.Supplier;
 import unlp.info.bd2.model.TourGuideUser;
 import unlp.info.bd2.model.User;
 import unlp.info.bd2.repositories.ItemServiceRepository;
+import unlp.info.bd2.repositories.ItemServiceRepositoryInterface;
 import unlp.info.bd2.repositories.PurchaseRepository;
+import unlp.info.bd2.repositories.PurchaseRepositoryInterface;
 import unlp.info.bd2.repositories.ReviewRepository;
+import unlp.info.bd2.repositories.ReviewRepositoryInterface;
 import unlp.info.bd2.repositories.RouteRepository;
+import unlp.info.bd2.repositories.RouteRepositoryInterface;
 import unlp.info.bd2.repositories.ServiceRepository;
+import unlp.info.bd2.repositories.ServiceRepositoryInterface;
 import unlp.info.bd2.repositories.StopRepository;
+import unlp.info.bd2.repositories.StopRepositoryInterface;
 import unlp.info.bd2.repositories.SupplierRepository;
+import unlp.info.bd2.repositories.SupplierRepositoryInterface;
 import unlp.info.bd2.repositories.UserRepository;
+import unlp.info.bd2.repositories.UserRepositoryInterface;
 import unlp.info.bd2.utils.ToursException;
 
-public class ServiceLayer implements ToursService {
+public class TourServiceImpl implements ToursService {
 
-    private PurchaseRepository purchaseRepository;
-    private ReviewRepository reviewRepository;
-    private RouteRepository routeRepository;
-    private ServiceRepository serviceRepository;
-    private SupplierRepository supplierRepository;
-    private UserRepository userRepository;
-    private ItemServiceRepository itemServiceRepository;
-    private StopRepository stopRepository;
+    private ItemServiceRepositoryInterface itemServiceRepository;
+    private PurchaseRepositoryInterface purchaseRepository;
+    private ReviewRepositoryInterface reviewRepository;
+    private RouteRepositoryInterface routeRepository;
+    private ServiceRepositoryInterface serviceRepository;
+    private StopRepositoryInterface stopRepository;
+    private SupplierRepositoryInterface supplierRepository;
+    private UserRepositoryInterface userRepository;
 
-    public ServiceLayer(PurchaseRepository purchaseRepository, ReviewRepository reviewRepository, RouteRepository routeRepository, ServiceRepository serviceRepository, SupplierRepository supplierRepository, UserRepository userRepository, ItemServiceRepository itemServiceRepository, StopRepository stopRepository) {
-        this.purchaseRepository = purchaseRepository;
-        this.reviewRepository = reviewRepository;
-        this.routeRepository = routeRepository;
-        this.serviceRepository = serviceRepository;
-        this.supplierRepository = supplierRepository;
-        this.userRepository = userRepository;
-        this.itemServiceRepository = itemServiceRepository;
-        this.stopRepository = stopRepository;
-    }
 
     @Transactional
     public User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException {
