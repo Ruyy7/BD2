@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class RouteRepository {
+public class RouteRepository implements RouteRepositoryInterface{
     @Autowired
     private SessionFactory sessionFactory;
 

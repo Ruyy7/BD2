@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import unlp.info.bd2.model.Review;
 import unlp.info.bd2.utils.ToursException;
 
-public class ReviewRepository {
+public class ReviewRepository implements ReviewRepositoryInterface{
     @Autowired
     private SessionFactory sessionFactory;
 

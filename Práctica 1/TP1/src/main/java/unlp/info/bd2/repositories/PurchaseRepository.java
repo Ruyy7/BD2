@@ -12,7 +12,7 @@ import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class PurchaseRepository {
+public class PurchaseRepository implements PurchaseRepositoryInterface{
     @Autowired
     private SessionFactory sessionFactory;
 

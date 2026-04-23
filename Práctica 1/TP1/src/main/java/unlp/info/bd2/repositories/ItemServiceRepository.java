@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import unlp.info.bd2.model.ItemService;
 import unlp.info.bd2.utils.ToursException;
 
-public class ItemServiceRepository {
+public class ItemServiceRepository implements ItemServiceRepositoryInterface{
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void save (ItemService ItemService) throws ToursException{
+    public void save (ItemService itemService) throws ToursException{
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.persist(ItemService);
+            session.persist(itemService);
         }
         catch (Exception e){
             if (e.getClass().equals(org.hibernate.exception.ConstraintViolationException.class)){
@@ -26,20 +26,20 @@ public class ItemServiceRepository {
         }
     }
 
-    public void update (ItemService ItemService){
+    public void update (ItemService itemService){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.merge(ItemService);
+            session.merge(itemService);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
-    public void delete (ItemService ItemService){
+    public void delete (ItemService itemService){
         try {
             Session session = this.sessionFactory.getCurrentSession();
-            session.remove(ItemService);
+            session.remove(itemService);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

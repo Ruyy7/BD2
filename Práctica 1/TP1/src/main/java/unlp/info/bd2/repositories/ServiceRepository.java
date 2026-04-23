@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import unlp.info.bd2.model.Service;
 import unlp.info.bd2.utils.ToursException;
 
-public class ServiceRepository {
+public class ServiceRepository implements ServiceRepositoryInterface{
     @Autowired
     private SessionFactory sessionFactory;
 
