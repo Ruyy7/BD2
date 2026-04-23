@@ -11,14 +11,17 @@ public class AppConfig {
 
     @Bean
     @Primary
-    public ToursService createService() {
-        ToursRepository repository = this.createRepository();
-        return new ToursServiceImpl(repository);
+    public ToursService createService(ItemServiceRepositoryInterface itemServiceRepository,
+            PurchaseRepositoryInterface purchaseRepository, ReviewRepositoryInterface reviewRepository,
+            RouteRepositoryInterface routeRepository, ServiceRepositoryInterface serviceRepository,
+            StopRepositoryInterface stopRepository, SupplierRepositoryInterface supplierRepository,
+            UserRepositoryInterface userRepository) {
+        return new TourServiceImpl(itemServiceRepository, purchaseRepository, reviewRepository, routeRepository, serviceRepository, stopRepository, supplierRepository, userRepository);
     }
 
-    @Bean
-    @Primary
-    public ToursRepository createRepository() {
-        return new ToursRepositoryImpl();
-    }
+    // @Bean
+    // @Primary
+    // public ToursRepository createRepository() {
+    //     return new ToursRepositoryImpl();
+    // }
 }

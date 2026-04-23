@@ -45,6 +45,20 @@ public class TourServiceImpl implements ToursService {
     private SupplierRepositoryInterface supplierRepository;
     private UserRepositoryInterface userRepository;
 
+    public TourServiceImpl(ItemServiceRepositoryInterface itemServiceRepository,
+            PurchaseRepositoryInterface purchaseRepository, ReviewRepositoryInterface reviewRepository,
+            RouteRepositoryInterface routeRepository, ServiceRepositoryInterface serviceRepository,
+            StopRepositoryInterface stopRepository, SupplierRepositoryInterface supplierRepository,
+            UserRepositoryInterface userRepository) {
+        this.itemServiceRepository = itemServiceRepository;
+        this.purchaseRepository = purchaseRepository;
+        this.reviewRepository = reviewRepository;
+        this.routeRepository = routeRepository;
+        this.serviceRepository = serviceRepository;
+        this.stopRepository = stopRepository;
+        this.supplierRepository = supplierRepository;
+        this.userRepository = userRepository;
+    }
 
     @Transactional
     public User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException {
