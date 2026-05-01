@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import jakarta.transaction.Transactional;
 import unlp.info.bd2.model.DriverUser;
 import unlp.info.bd2.model.ItemService;
@@ -71,31 +74,19 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public Optional<User> getUserById(Long id) throws ToursException {
-        return this.userRepository.getUserById(id);
+        return this.userRepository.findById(id);
     }
 
     @Transactional
     public Optional<User> getUserByUsername(String username) throws ToursException {
-        return this.userRepository.getUserByUsername(username);
+        return this.userRepository.findByUsername(username);
     }
 
     @Transactional
     public User updateUser(User user) throws ToursException {
-        Optional<User> user_db = this.userRepository.getUserById(user.getId());
-        if (user_db.isEmpty())
-            throw new ToursException("No existe el usuario a modificar");
-        User userToModify = user_db.get();
-        userToModify.setName(user.getName());
-        userToModify.setPassword(user.getPassword());
-        userToModify.setEmail(user.getEmail());
-        userToModify.setBirthdate(user.getBirthdate());
-        userToModify.setPhoneNumber(user.getPhoneNumber());
-        if (user instanceof DriverUser && userToModify instanceof DriverUser)
-            ((DriverUser) userToModify).setExpedient(((DriverUser)user).getExpedient());
-        if (user instanceof TourGuideUser && userToModify instanceof TourGuideUser)
-            ((TourGuideUser) userToModify).setEducation(((TourGuideUser)user).getEducation());
-        this.userRepository.update(user);
-        return userToModify;
+        if (!this.userRepository.existsById(user.getId()))
+            throw new ToursException("No existe el usuario ingresado, no se pudo realizar la actualización");
+        return this.userRepository.save(user);
     }
 
     @Transactional
@@ -112,7 +103,7 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public List<Stop> getStopByNameStart(String name) {
-        return this.stopRepository.getStopByNameStart(name);
+        return this.stopRepository.findByNameStartsWith(name);
     }
 
     @Transactional
@@ -124,20 +115,20 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public Optional<Route> getRouteById(Long id) {
-        return this.routeRepository.getRouteById(id);
+        return this.routeRepository.findById(id);
     }
 
     @Transactional
     public List<Route> getRoutesBelowPrice(float price) {
-        return this.routeRepository.getRoutesBelowPrice(price);
+        return this.routeRepository.findByPriceLessThan(price);
     }
 
     @Transactional
     public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
-        Optional<User> optionalDriver = userRepository.getUserByUsername(username);
+        Optional<User> optionalDriver = userRepository.findByUsername(username);
         if (optionalDriver.isEmpty() || !(optionalDriver.get() instanceof DriverUser))
             throw new ToursException("No existe el usuario ingresado, no se pudo realizar la asignación");
-        Optional<Route> optionalRoute = routeRepository.getRouteById(idRoute);
+        Optional<Route> optionalRoute = routeRepository.findById(idRoute);
         if (optionalRoute.isEmpty())
             throw new ToursException("No existe la ruta ingresada");
         Route route = optionalRoute.get();
@@ -148,10 +139,10 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public void assignTourGuideByUsername(String username, Long idRoute) throws ToursException {
-        Optional<User> optionalTourGuide = userRepository.getUserByUsername(username);
+        Optional<User> optionalTourGuide = userRepository.findByUsername(username);
         if (optionalTourGuide.isEmpty() || !(optionalTourGuide.get() instanceof TourGuideUser))
             throw new ToursException("No existe el usuario ingresado, no se pudo realizar la asignación");
-        Optional<Route> optionalRoute = routeRepository.getRouteById(idRoute);
+        Optional<Route> optionalRoute = routeRepository.findById(idRoute);
         if (optionalRoute.isEmpty())
             throw new ToursException("No existe la ruta ingresada");
         Route route = optionalRoute.get();
@@ -183,7 +174,7 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public Service updateServicePriceById(Long id, float newPrice) throws ToursException {
-        Optional<Service> optService = serviceRepository.getServiceById(id);
+        Optional<Service> optService = serviceRepository.findById(id);
         if (optService.isEmpty())
             throw new ToursException("No existe el servicio");
         Service service = optService.get();
@@ -193,17 +184,17 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public Optional<Supplier> getSupplierById(Long id) {
-        return this.supplierRepository.getSupplierById(id);
+        return this.supplierRepository.findById(id);
     }
 
     @Transactional
     public Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber) {
-        return this.supplierRepository.getSupplierByAuthorizationNumber(authorizationNumber);
+        return this.supplierRepository.findByAuthorizationNumber(authorizationNumber);
     }
 
     @Transactional
     public Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException {
-        return this.serviceRepository.getServiceByNameAndSupplierId(name, id);
+        return this.serviceRepository.findByNameAndSupplierId(name, id);
     }
 
     @Transactional
@@ -234,7 +225,7 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public Optional<Purchase> getPurchaseByCode(String code) {
-        return this.purchaseRepository.getPurchaseByCode(code);
+        return this.purchaseRepository.findByCode(code);
     }
 
     @Transactional
@@ -257,17 +248,18 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public List<Purchase> getAllPurchasesOfUsername(String username) {
-        return this.purchaseRepository.getAllPurchasesOfUsername(username);
+        return this.purchaseRepository.findByUserUsername(username);
     }
 
     @Transactional
     public List<User> getUserSpendingMoreThan(float mount) {
-        return this.userRepository.getUserSpendingMoreThan(mount);
+        return this.userRepository.findUsersSpentMoreThan(mount);
     }
 
     @Transactional
     public List<Supplier> getTopNSuppliersInPurchases(int n) {
-        return this.supplierRepository.getTopNSuppliersInPurchases(n);
+        Pageable pageable = PageRequest.of(0, n);
+        return this.supplierRepository.findMostUsedSuppliers(pageable);
     }
 
     @Transactional
@@ -277,31 +269,33 @@ public class ServiceLayer implements ToursService {
 
     @Transactional
     public List<Route> getRoutesWithStop(Stop stop) {
-        return this.routeRepository.getRoutesWithStop(stop);
+        return this.routeRepository.findByStopsContaining(stop);
     }
 
     @Transactional
     public Long getMaxStopOfRoutes() {
-        return this.routeRepository.getMaxStopOfRoutes();
+        return this.routeRepository.findMaxStopsOfRoute();
     }
 
     @Transactional
     public List<Route> getRoutsNotSell() {
-        return this.routeRepository.getRoutesNotSell();
+        return this.routeRepository.findRoutesNotSell();
     }
 
     @Transactional
     public List<Route> getTop3RoutesWithMaxRating() {
-        return this.routeRepository.getTop3RoutesWithMaxRating();
+        Pageable pageable = PageRequest.of(0, 3);
+        return this.routeRepository.findTop3RoutesWithMaxRating(pageable);
     }
 
     @Transactional
     public Service getMostDemandedService() {
-        return this.serviceRepository.getMostDemandedService();
+        Pageable pageable = PageRequest.of(0, 1);
+        return this.serviceRepository.findMostDemandedService(pageable);
     }
 
     @Transactional
     public List<TourGuideUser> getTourGuidesWithRating1() {
-        return this.userRepository.getTourGuidesWithRating1();
+        return this.userRepository.findTourGuideUsersWithRating1();
     }   
 }
