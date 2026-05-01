@@ -291,7 +291,7 @@ public class ServiceLayer implements ToursService {
     @Transactional
     public Service getMostDemandedService() {
         Pageable pageable = PageRequest.of(0, 1);
-        return this.serviceRepository.findMostDemandedService(pageable);
+        return this.serviceRepository.findMostDemandedService(pageable).stream().findFirst().orElse(null);
     }
 
     @Transactional
