@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import unlp.info.bd2.dto.RoutePurchaseSummary;
 import unlp.info.bd2.model.Route;
 import unlp.info.bd2.model.Stop;
 
@@ -20,4 +21,6 @@ public interface RouteRepository extends CrudRepository<Route,Long>{
     @Query("SELECT p.route FROM Purchase p WHERE p.review IS NOT NULL GROUP BY p.route ORDER BY AVG(p.review.rating) DESC")
     List<Route> findTop3RoutesWithMaxRating(Pageable pageable);
 
+    @Query("SELECT new RoutePurchaseSummary(r.name, COUNT(p), AVG(p.price)) FROM Route r LEFT JOIN Purchase p ON r = p.route GROUP BY r")
+    List<RoutePurchaseSummary> findRoutePurchaseSummaries();
 }

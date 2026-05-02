@@ -1,10 +1,10 @@
 package unlp.info.bd2.model;
+
 import java.util.Date;
 import java.util.List;
-
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import jakarta.persistence.Column;
-// import jakarta.persistence.DiscriminatorColumn;
-// import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -13,16 +13,11 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "users")
-
-// @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-// @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING) <- Formo parte del SINGLE_TABLE
-
 @Inheritance(strategy = InheritanceType.JOINED)
-
-// @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@SQLDelete(sql = "UPDATE users SET active = false WHERE id = ?")
+@Where(clause = "active = true")
 
 public class User {
 
@@ -42,6 +37,7 @@ public class User {
 
     private String phoneNumber;
 
+    @Column(nullable = false)
     private boolean active;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
